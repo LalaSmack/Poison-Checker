@@ -70,7 +70,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -149,10 +149,10 @@ TextureImporter:
       name: LongButtons2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 34
-        width: 16
-        height: 12
+        x: 1
+        y: 35
+        width: 14
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -171,10 +171,10 @@ TextureImporter:
       name: LongButtons2_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 34
-        width: 16
-        height: 11
+        x: 17
+        y: 35
+        width: 14
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -193,10 +193,10 @@ TextureImporter:
       name: LongButtons2_2
       rect:
         serializedVersion: 2
-        x: 32
-        y: 34
-        width: 16
-        height: 12
+        x: 33
+        y: 35
+        width: 14
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,10 +215,10 @@ TextureImporter:
       name: LongButtons2_3
       rect:
         serializedVersion: 2
-        x: 48
-        y: 34
-        width: 16
-        height: 11
+        x: 49
+        y: 35
+        width: 14
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -237,10 +237,10 @@ TextureImporter:
       name: LongButtons2_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 18
-        width: 16
-        height: 12
+        x: 1
+        y: 19
+        width: 14
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -259,10 +259,10 @@ TextureImporter:
       name: LongButtons2_5
       rect:
         serializedVersion: 2
-        x: 16
-        y: 18
-        width: 16
-        height: 11
+        x: 17
+        y: 19
+        width: 14
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -281,10 +281,10 @@ TextureImporter:
       name: LongButtons2_6
       rect:
         serializedVersion: 2
-        x: 32
-        y: 18
-        width: 16
-        height: 12
+        x: 33
+        y: 19
+        width: 14
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -303,10 +303,10 @@ TextureImporter:
       name: LongButtons2_7
       rect:
         serializedVersion: 2
-        x: 48
-        y: 18
-        width: 16
-        height: 11
+        x: 49
+        y: 19
+        width: 14
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -325,10 +325,10 @@ TextureImporter:
       name: LongButtons2_8
       rect:
         serializedVersion: 2
-        x: 0
-        y: 2
-        width: 16
-        height: 12
+        x: 1
+        y: 3
+        width: 14
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -347,10 +347,10 @@ TextureImporter:
       name: LongButtons2_9
       rect:
         serializedVersion: 2
-        x: 16
-        y: 2
-        width: 16
-        height: 11
+        x: 17
+        y: 3
+        width: 14
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -369,10 +369,10 @@ TextureImporter:
       name: LongButtons2_10
       rect:
         serializedVersion: 2
-        x: 32
-        y: 2
-        width: 16
-        height: 12
+        x: 33
+        y: 3
+        width: 14
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -391,10 +391,10 @@ TextureImporter:
       name: LongButtons2_11
       rect:
         serializedVersion: 2
-        x: 48
-        y: 2
-        width: 16
-        height: 11
+        x: 49
+        y: 3
+        width: 14
+        height: 9
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -413,7 +413,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 96b07d1c963e51b4d85a58a00e38c898
     internalID: 0
     vertices: []
     indices: 
