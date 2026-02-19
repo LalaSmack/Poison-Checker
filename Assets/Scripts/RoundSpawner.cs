@@ -12,6 +12,7 @@ public class RoundSpawner : MonoBehaviour
     [Header("UI References")]
     public GameObject dishPrefab;
     public Transform dishContainer;
+    [SerializeField] private GameOver gameOverManager;
 
     [Header("Round Settings")]
     public int startDishes = 3;
@@ -164,7 +165,7 @@ public class RoundSpawner : MonoBehaviour
             if (playerMarked != shouldBePoisoned)
             {
                 Debug.Log("LOSE: incorrect poison selection");
-                // TODO: show Lose UI / reset / etc.
+                gameOverManager.TriggerGameOver("You served the wrong dishes!");
                 return;
             }
         }
