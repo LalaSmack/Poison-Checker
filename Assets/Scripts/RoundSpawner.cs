@@ -35,10 +35,22 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField]  private TextMeshProUGUI tastesLeftText;
     [SerializeField]  private TextMeshProUGUI poisonCountText;
     [SerializeField]  private TextMeshProUGUI roundText;
+    [SerializeField]  private TextMeshProUGUI dayText;
     private int round = 0;
+    
+    // Tracking Days
+    [Header("Day Settings")]
+    public int totalDays = 5;
+    public int minRoundsPerDay = 4;
+    public int maxRoundsPerDay = 6;
+    private int day = 1;
+    private int roundInDay = 0;
+    private int roundsThisDay = 0;
 
     private int poisonCount = 1;
     private int tastesLeft = 0;
+    private int carriedOverTastes = 0;
+
     private int markedCount = 0;
     private DishUI selectedDish;
     private List<DishUI> spawnedDishes = new List<DishUI>();
@@ -47,12 +59,24 @@ public class RoundSpawner : MonoBehaviour
     public void StartGame()
     {
         round = 0;
-        NextRound();
+        day = 1;
+        StartNewDay();
+        //NextRound();
     }
 
+    private void StartNewDay()
+    {
+        roundsThisDay = UnityEngine.Random.Range(minRoundsPerDay, maxRoundsPerDay + 1);
+        roundInDay = 0;
+        round = 0;
+        //no carried over tastes between days 
+        carriedOverTastes = 0; // Reset carried over tastes at the start of a new day
+        NextRound();
+    }
     public void NextRound()
     {
         round++;
+        roundInDay++;
 
         ClearContainer();
         spawnedDishes.Clear();
@@ -63,7 +87,8 @@ public class RoundSpawner : MonoBehaviour
         int dishCount = startDishes + (round - 1) * addPerRound;
 
         poisonCount = CalculatePoisonCount(dishCount);
-        tastesLeft = CalculateTastesLeft(round);
+        tastesLeft = CalculateTastesLeft(round) + carriedOverTastes;
+        carriedOverTastes = 0; // Reset carried over tastes, will be updated if player doesn't use all tastes this round
 
         // Decide which indices are poisoned (unique)
         List<int> indices = new List<int>();
@@ -170,6 +195,22 @@ public class RoundSpawner : MonoBehaviour
             }
         }
         Debug.Log("WIN: correct poisons! Next round.");
+        carriedOverTastes = tastesLeft; // Save unused tastes for next round
+        
+    // If finished today's rounds, advance day or win
+    if (roundInDay >= roundsThisDay)
+        {       
+            if (day >= totalDays)
+            {
+                TriggerWin();
+                return;
+            }
+
+            day++;
+            StartNewDay();
+            return;
+        }
+
         NextRound();
     }
     private void UpdateButtons()
@@ -188,6 +229,7 @@ public class RoundSpawner : MonoBehaviour
 
     private void UpdateTopUI()
     {
+        if (dayText != null) dayText.text = $"Day: {day}";
         if (tastesLeftText != null) tastesLeftText.text = $"Tastes: {tastesLeft}";
         if (poisonCountText != null) poisonCountText.text = $"Poisons: {poisonCount}";
         if (roundText != null) roundText.text = $"Round: {round}";
@@ -220,5 +262,15 @@ public class RoundSpawner : MonoBehaviour
             int r = UnityEngine.Random.Range(i, list.Count);
             (list[i], list[r]) = (list[r], list[i]);
         }
+    }
+
+    private void TriggerWin()
+    {
+        Debug.Log("YOU WIN: Completed all rounds on Day 5!");
+        gameOverManager.TriggerGameOver("You survived all 5 days!\n", "You Win!");
+
+        if (serveButton != null) serveButton.interactable = false;
+        if (tasteButton != null) tasteButton.interactable = false;
+        if (markButton != null) markButton.interactable = false;
     }
 }
