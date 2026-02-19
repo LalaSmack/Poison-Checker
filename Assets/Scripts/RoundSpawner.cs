@@ -36,6 +36,9 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField]  private TextMeshProUGUI poisonCountText;
     [SerializeField]  private TextMeshProUGUI roundText;
     [SerializeField]  private TextMeshProUGUI dayText;
+    [SerializeField] private TextMeshProUGUI dayStartText;
+    [SerializeField] private float popupDuration = 0.3f;
+
     private int round = 0;
     
     // Tracking Days
@@ -71,6 +74,9 @@ public class RoundSpawner : MonoBehaviour
         round = 0;
         //no carried over tastes between days 
         carriedOverTastes = 0; // Reset carried over tastes at the start of a new day
+
+        ShowDayStartPopup();
+
         NextRound();
     }
     public void NextRound()
@@ -279,4 +285,36 @@ public class RoundSpawner : MonoBehaviour
         if (tasteButton != null) tasteButton.interactable = false;
         if (markButton != null) markButton.interactable = false;
     }
+
+    private void ShowDayStartPopup()
+{
+    StartCoroutine(DayPopupRoutine());
+}
+
+private System.Collections.IEnumerator DayPopupRoutine()
+{
+    dayStartText.gameObject.SetActive(true);
+    dayStartText.text = $"Day {day}";
+
+    CanvasGroup canvasGroup = dayStartText.GetComponent<CanvasGroup>();
+
+    if (canvasGroup == null)
+        canvasGroup = dayStartText.gameObject.AddComponent<CanvasGroup>();
+
+    canvasGroup.alpha = 1f;
+
+    yield return new WaitForSeconds(popupDuration);
+
+    float fadeTime = 0.4f;
+    float timer = 0f;
+
+    while (timer < fadeTime)
+    {
+        timer += Time.deltaTime;
+        canvasGroup.alpha = Mathf.Lerp(1f, 0f, timer / fadeTime);
+        yield return null;
+    }
+
+    dayStartText.gameObject.SetActive(false);
+}
 }
