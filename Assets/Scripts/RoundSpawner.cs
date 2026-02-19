@@ -84,10 +84,16 @@ public class RoundSpawner : MonoBehaviour
         selectedDish = null;
         markedCount = 0;
 
-        int dishCount = startDishes + (round - 1) * addPerRound;
+        int dishCount = startDishes + (round - 1) * addPerRound + (day - 1); // Increase dishes by round and day
+
+        if (dishCount > 10) 
+        {
+            dishCount = 10; // Cap at 10 dishes for performance and playability
+            Debug.Log("Max dish count reached!");
+        }
 
         poisonCount = CalculatePoisonCount(dishCount);
-        tastesLeft = CalculateTastesLeft(round) + carriedOverTastes;
+        tastesLeft = CalculateTastesLeft(round) + carriedOverTastes + (day - 1); // Add carried over tastes and bonus taste per day
         carriedOverTastes = 0; // Reset carried over tastes, will be updated if player doesn't use all tastes this round
 
         // Decide which indices are poisoned (unique)
@@ -267,7 +273,7 @@ public class RoundSpawner : MonoBehaviour
     private void TriggerWin()
     {
         Debug.Log("YOU WIN: Completed all rounds on Day 5!");
-        gameOverManager.TriggerGameOver("You survived all 5 days!\n", "You Win!");
+        gameOverManager.TriggerGameOver("You survived all 5 days!\n Your King is safe!", "You Win!");
 
         if (serveButton != null) serveButton.interactable = false;
         if (tasteButton != null) tasteButton.interactable = false;
