@@ -31,9 +31,9 @@ public class RoundSpawner : MonoBehaviour
     public Button serveButton;
     public Button tasteButton;
     public Button markButton;
-    public TextMeshProUGUI tastesLeftText;
-    public TextMeshProUGUI poisonCountText;
-    public TextMeshProUGUI roundText;
+    [SerializeField]  private TextMeshProUGUI tastesLeftText;
+    [SerializeField]  private TextMeshProUGUI poisonCountText;
+    [SerializeField]  private TextMeshProUGUI roundText;
     private int round = 0;
 
     private int poisonCount = 1;
@@ -187,9 +187,9 @@ public class RoundSpawner : MonoBehaviour
 
     private void UpdateTopUI()
     {
-        //if (tastesLeftText != null) tastesLeftText.text = $"Tastes: {tastesLeft}";
-        //if (poisonCountText != null) poisonCountText.text = $"Poisons: {poisonCount}";
-        //if (roundText != null) roundText.text = $"Round: {round}";
+        if (tastesLeftText != null) tastesLeftText.text = $"Tastes: {tastesLeft}";
+        if (poisonCountText != null) poisonCountText.text = $"Poisons: {poisonCount}";
+        if (roundText != null) roundText.text = $"Round: {round}";
     }
 
     private int CalculatePoisonCount(int dishCount)
