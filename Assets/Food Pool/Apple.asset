@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7eeb958330d7f94083a0f2e6e9d6878, type: 3}
   m_Name: Apple
   m_EditorClassIdentifier: 
-  foodName: 
-  foodSprite: {fileID: 0}
+  foodName: Apple
+  foodSprite: {fileID: 3983405018662690971, guid: e1859664a253ccc4ea66b76eb38d78f9, type: 3}

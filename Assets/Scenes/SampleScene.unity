@@ -907,6 +907,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b037713db8afeea489c56493aa2d15cd, type: 2}
   - {fileID: 11400000, guid: b495377703efcc34595128305e7528fd, type: 2}
   - {fileID: 11400000, guid: 4aa27cde51e2a1040b89351bee20d484, type: 2}
+  - {fileID: 11400000, guid: 1666229858077d14d806e34c7a26e8af, type: 2}
   dishPrefab: {fileID: 4946674601725152398, guid: dab7c649377730846b960c4d2a5d67c7, type: 3}
   dishContainer: {fileID: 1760323141}
   startDishes: 2
@@ -1907,7 +1908,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.899371, g: 0.88522995, b: 0.88522995, a: 0.09411765}
+  m_Color: {r: 0.10062885, g: 0.09651509, b: 0.09651509, a: 0.09411765}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
