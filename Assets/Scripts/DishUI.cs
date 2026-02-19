@@ -87,22 +87,22 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
         isRevealed = true;
         if (IsPoisoned)
         {
-            StartFlashRed();
+            StartFlash(poisonTint);
         }
         else
         {
-            ApplyTint();
+            StartFlash(safeTint);
         }
     }
-    private void StartFlashRed()
+    private void StartFlash(Color flashColor)
 {
     if (flashRoutine != null)
         StopCoroutine(flashRoutine);
 
-    flashRoutine = StartCoroutine(FlashRedRoutine());
+    flashRoutine = StartCoroutine(FlashRoutine(flashColor));
 }
 
-    private IEnumerator FlashRedRoutine()
+    private IEnumerator FlashRoutine(Color flashColor)
 {
     if (backgroundImage == null) yield break;
 
@@ -113,7 +113,7 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
 
     for (int i = 0; i < flashCount; i++)
     {
-        backgroundImage.color = poisonTint;
+        backgroundImage.color = flashColor;
         yield return new WaitForSeconds(flashInterval);
         ApplyTint(); // return to appropriate tint (marked/safe/default)
         yield return new WaitForSeconds(flashInterval);
@@ -132,13 +132,6 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
         {
             Debug.Log($"Applying poison tint to marked dish {data.foodName}");
             backgroundImage.color = poisonTint;
-            return;
-        }
-
-        // Revealed safe → green
-        if (isRevealed && !IsPoisoned)
-        {
-            backgroundImage.color = safeTint;
             return;
         }
 
