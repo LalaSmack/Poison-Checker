@@ -39,6 +39,8 @@ public class RoundSpawner : MonoBehaviour
 
     private int poisonCount = 1;
     private int tastesLeft = 0;
+    private int carriedOverTastes = 0;
+
     private int markedCount = 0;
     private DishUI selectedDish;
     private List<DishUI> spawnedDishes = new List<DishUI>();
@@ -63,7 +65,8 @@ public class RoundSpawner : MonoBehaviour
         int dishCount = startDishes + (round - 1) * addPerRound;
 
         poisonCount = CalculatePoisonCount(dishCount);
-        tastesLeft = CalculateTastesLeft(round);
+        tastesLeft = CalculateTastesLeft(round) + carriedOverTastes;
+        carriedOverTastes = 0; // Reset carried over tastes, will be updated if player doesn't use all tastes this round
 
         // Decide which indices are poisoned (unique)
         List<int> indices = new List<int>();
@@ -170,6 +173,7 @@ public class RoundSpawner : MonoBehaviour
             }
         }
         Debug.Log("WIN: correct poisons! Next round.");
+        carriedOverTastes = tastesLeft; // Save unused tastes for next round
         NextRound();
     }
     private void UpdateButtons()
