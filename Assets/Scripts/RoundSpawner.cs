@@ -36,6 +36,9 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField]  private TextMeshProUGUI poisonCountText;
     [SerializeField]  private TextMeshProUGUI roundText;
     [SerializeField]  private TextMeshProUGUI dayText;
+    [SerializeField] private TextMeshProUGUI dayStartText;
+    [SerializeField] private float popupDuration = 0.3f;
+
     private int round = 0;
     
     // Tracking Days
@@ -71,6 +74,9 @@ public class RoundSpawner : MonoBehaviour
         round = 0;
         //no carried over tastes between days 
         carriedOverTastes = 0; // Reset carried over tastes at the start of a new day
+
+        ShowDayStartPopup();
+
         NextRound();
     }
     public void NextRound()
@@ -84,10 +90,16 @@ public class RoundSpawner : MonoBehaviour
         selectedDish = null;
         markedCount = 0;
 
-        int dishCount = startDishes + (round - 1) * addPerRound;
+        int dishCount = startDishes + (round - 1) * addPerRound + (day - 1); // Increase dishes by round and day
+
+        if (dishCount > 10) 
+        {
+            dishCount = 10; // Cap at 10 dishes for performance and playability
+            Debug.Log("Max dish count reached!");
+        }
 
         poisonCount = CalculatePoisonCount(dishCount);
-        tastesLeft = CalculateTastesLeft(round) + carriedOverTastes;
+        tastesLeft = CalculateTastesLeft(round) + carriedOverTastes + (day - 1); // Add carried over tastes and bonus taste per day
         carriedOverTastes = 0; // Reset carried over tastes, will be updated if player doesn't use all tastes this round
 
         // Decide which indices are poisoned (unique)
@@ -267,10 +279,42 @@ public class RoundSpawner : MonoBehaviour
     private void TriggerWin()
     {
         Debug.Log("YOU WIN: Completed all rounds on Day 5!");
-        gameOverManager.TriggerGameOver("You survived all 5 days!\n", "You Win!");
+        gameOverManager.TriggerGameOver("You survived all 5 days!\n Your King is safe!", "You Win!");
 
         if (serveButton != null) serveButton.interactable = false;
         if (tasteButton != null) tasteButton.interactable = false;
         if (markButton != null) markButton.interactable = false;
     }
+
+    private void ShowDayStartPopup()
+{
+    StartCoroutine(DayPopupRoutine());
+}
+
+private System.Collections.IEnumerator DayPopupRoutine()
+{
+    dayStartText.gameObject.SetActive(true);
+    dayStartText.text = $"Day {day}";
+
+    CanvasGroup canvasGroup = dayStartText.GetComponent<CanvasGroup>();
+
+    if (canvasGroup == null)
+        canvasGroup = dayStartText.gameObject.AddComponent<CanvasGroup>();
+
+    canvasGroup.alpha = 1f;
+
+    yield return new WaitForSeconds(popupDuration);
+
+    float fadeTime = 0.4f;
+    float timer = 0f;
+
+    while (timer < fadeTime)
+    {
+        timer += Time.deltaTime;
+        canvasGroup.alpha = Mathf.Lerp(1f, 0f, timer / fadeTime);
+        yield return null;
+    }
+
+    dayStartText.gameObject.SetActive(false);
+}
 }
