@@ -5,6 +5,7 @@ using UnityEditor;
 
 public class GameOver : MonoBehaviour
 {
+    [SerializeField] private TMP_Text GameOverText;
     [SerializeField] private TMP_Text reasonText;
     [SerializeField] private GameObject gameOverPanel;
 
@@ -16,13 +17,15 @@ public class GameOver : MonoBehaviour
         isGameOver = false;
     }
 
-    public void TriggerGameOver(string reason="")
+    public void TriggerGameOver(string reason="", string gameOverMessage = "Game Over!")
     {
         if (isGameOver) return; // Prevent multiple triggers
         
         isGameOver = true;
         if (reasonText != null)
             reasonText.text = reason;
+        if (GameOverText != null)
+            GameOverText.text = gameOverMessage;
         gameOverPanel.SetActive(true);
 
         Time.timeScale = 0f; // Pause the game
