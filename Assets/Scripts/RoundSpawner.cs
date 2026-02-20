@@ -39,6 +39,10 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dayStartText;
     [SerializeField] private float popupDuration = 0.3f;
 
+    [Header("Score")]
+    [SerializeField] private TextMeshProUGUI scoreText;
+    private int score = 0;
+
     private int round = 0;
     
     // Tracking Days
@@ -72,6 +76,9 @@ private int currentHealth;
         day = 1;
         currentHealth = maxHealth;
         UpdateHealthUI();
+
+        score = 0;
+        UpdateScoreUI();
         StartNewDay();
         //NextRound();
     }
@@ -104,13 +111,14 @@ private int currentHealth;
         if (dishCount > 10) 
         {
             dishCount = 10; // Cap at 10 dishes for performance and playability
-            Debug.Log("Max dish count reached!");
+            //Debug.Log("Max dish count reached!");
         }
 
         poisonCount = CalculatePoisonCount(dishCount);
         tastesLeft = CalculateTastesLeft(round) + carriedOverTastes + (day - 1); // Add carried over tastes and bonus taste per day
         carriedOverTastes = 0; // Reset carried over tastes, will be updated if player doesn't use all tastes this round
 
+        AddRoundScore();
         // Decide which indices are poisoned (unique)
         List<int> indices = new List<int>();
         for (int i = 0; i < dishCount; i++) indices.Add(i);
@@ -161,7 +169,7 @@ private int currentHealth;
 
     selectedDish.SetMarked(true);
     GameAudio.Instance.PlayClick();
-    Debug.Log($"Dish {selectedDish.data.foodName} marked: {selectedDish.IsMarked}");
+    //Debug.Log($"Dish {selectedDish.data.foodName} marked: {selectedDish.IsMarked}");
     // Update markedCount
     markedCount++;
 
@@ -173,7 +181,7 @@ private int currentHealth;
 
         selectedDish = dish;
         selectedDish.SetSelected(true);
-        Debug.Log($"Selected dish: {selectedDish.data.foodName}");
+        //Debug.Log($"Selected dish: {selectedDish.data.foodName}");
         UpdateButtons();
     }
 
@@ -215,12 +223,12 @@ private int currentHealth;
 
             if (playerMarked != shouldBePoisoned)
             {
-                Debug.Log("LOSE: incorrect poison selection");
-                gameOverManager.TriggerGameOver("You served the wrong dishes!");
+                //Debug.Log("LOSE: incorrect poison selection");
+                gameOverManager.TriggerGameOver($"You served the wrong dishes!\n\nFinal Score: {score}");
                 return;
             }
         }
-        Debug.Log("WIN: correct poisons! Next round.");
+        //Debug.Log("WIN: correct poisons! Next round.");
         carriedOverTastes = tastesLeft; // Save unused tastes for next round
         
     // If finished today's rounds, advance day or win
@@ -292,14 +300,34 @@ private int currentHealth;
 
     private void TriggerWin()
     {
-        Debug.Log("YOU WIN: Completed all rounds on Day 5!");
-        gameOverManager.TriggerGameOver("You survived all 5 days!\n Your King is safe!", "You Win!");
+        //Debug.Log("YOU WIN: Completed all rounds on Day 5!");
+        ApplyWinBonus();
+        gameOverManager.TriggerGameOver($"You survived all 5 days!\n Your King is safe!\n\nFinal Score: {score}", "You Win!");
 
         if (serveButton != null) serveButton.interactable = false;
         if (tasteButton != null) tasteButton.interactable = false;
         if (markButton != null) markButton.interactable = false;
     }
 
+    private void AddRoundScore()
+    {
+        score += 10 * round;
+        score += 50 * day;
+        score += 15 * tastesLeft;
+        UpdateScoreUI();
+    }
+
+    private void ApplyWinBonus()
+    {
+        score = Mathf.RoundToInt(score * 2.5f) + 1000;
+        UpdateScoreUI();
+    }
+
+    private void UpdateScoreUI()
+    {
+        if (scoreText != null)
+            scoreText.text = $"Score: {score}";
+    }
     private void ShowDayStartPopup()
 {
     StartCoroutine(DayPopupRoutine());
@@ -320,7 +348,7 @@ private int currentHealth;
         {
             currentHealth = 0;
             UpdateHealthUI();
-            gameOverManager.TriggerGameOver("You tasted too much poison!");
+            gameOverManager.TriggerGameOver($"You tasted too much poison!\n\nFinal Score: {score}");
             return;
         }
 

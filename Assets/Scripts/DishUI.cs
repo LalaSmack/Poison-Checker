@@ -66,7 +66,7 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
 
     public void SetSelected(bool selected)
     {
-        Debug.Log($"Setting selected: {selected} for dish {data.foodName}");
+        //Debug.Log($"Setting selected: {selected} for dish {data.foodName}");
         if (outline != null)
             outline.enabled = selected;
     }
@@ -76,7 +76,7 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
         IsMarked = marked;
         if (IsMarked)
         {
-            Debug.Log($"Applying poison tint to marked dish {data.foodName}");
+            //Debug.Log($"Applying poison tint to marked dish {data.foodName}");
             ApplyTint();
             }
         
@@ -131,7 +131,7 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
             // Marked overrides everything
         if (IsMarked)
         {
-            Debug.Log($"Applying poison tint to marked dish {data.foodName}");
+            //Debug.Log($"Applying poison tint to marked dish {data.foodName}");
             backgroundImage.color = poisonTint;
             return;
         }
