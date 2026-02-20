@@ -58,7 +58,7 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField] private Slider healthBar;
     [SerializeField] private int maxHealth = 220;
     [SerializeField] private int poisonTasteDamage = 8;
-    [SerializeField] private int healPerNewDay = 20;
+    [SerializeField] private int healPerNewDay = 30;
 
 private int currentHealth;
     private int poisonCount = 1;
