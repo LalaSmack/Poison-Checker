@@ -2423,6 +2423,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b495377703efcc34595128305e7528fd, type: 2}
   - {fileID: 11400000, guid: 4aa27cde51e2a1040b89351bee20d484, type: 2}
   - {fileID: 11400000, guid: 1666229858077d14d806e34c7a26e8af, type: 2}
+  - {fileID: 11400000, guid: 9c065e0394ac9414982438cb88fbc7e6, type: 2}
+  - {fileID: 11400000, guid: a2478048e9edba9429739831ddb79dc9, type: 2}
+  - {fileID: 11400000, guid: 89f2f858f90bcd94a8710c5b884f4104, type: 2}
+  - {fileID: 11400000, guid: 398e1f944d34f4b4db17a1df7c5bd7ae, type: 2}
+  - {fileID: 11400000, guid: ae17f7f21af8e7946a5fa5c2614e627e, type: 2}
+  - {fileID: 11400000, guid: 6618a9142d9d4c34492cd52984c56c71, type: 2}
+  - {fileID: 11400000, guid: ed6719ad769ef554488396013fd70c6e, type: 2}
+  - {fileID: 11400000, guid: 2cc5da31b3bb2cc478f4ec6a56c1df1e, type: 2}
+  - {fileID: 11400000, guid: 928a87793c968804ca22b1b21102e77f, type: 2}
   dishPrefab: {fileID: 4946674601725152398, guid: dab7c649377730846b960c4d2a5d67c7, type: 3}
   dishContainer: {fileID: 1760323141}
   gameOverManager: {fileID: 1238743705}
@@ -2444,8 +2453,8 @@ MonoBehaviour:
   dayStartText: {fileID: 18941113}
   popupDuration: 3
   totalDays: 5
-  minRoundsPerDay: 4
-  maxRoundsPerDay: 6
+  minRoundsPerDay: 3
+  maxRoundsPerDay: 5
   healthBar: {fileID: 742505501}
   maxHealth: 100
   poisonTasteDamage: 10
