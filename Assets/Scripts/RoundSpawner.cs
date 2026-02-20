@@ -45,14 +45,14 @@ public class RoundSpawner : MonoBehaviour
     [Header("Day Settings")]
     public int totalDays = 5;
     public int minRoundsPerDay = 3;
-    public int maxRoundsPerDay = 6;
+    public int maxRoundsPerDay = 5;
     private int day = 1;
     private int roundInDay = 0;
     private int roundsThisDay = 0;
 
     [Header("Health")]
     [SerializeField] private Slider healthBar;
-    [SerializeField] private int maxHealth = 150;
+    [SerializeField] private int maxHealth = 220;
     [SerializeField] private int poisonTasteDamage = 8;
     [SerializeField] private int healPerNewDay = 20;
 
