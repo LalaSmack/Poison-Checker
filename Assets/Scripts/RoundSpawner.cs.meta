@@ -1,2 +1,21 @@
 fileFormatVersion: 2
 guid: 0c3d40e399ae0ca47ab59e33ab74a63a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - dishPrefab: {instanceID: 0}
+  - dishContainer: {instanceID: 0}
+  - serveButton: {instanceID: 0}
+  - tasteButton: {instanceID: 0}
+  - markButton: {instanceID: 0}
+  - tastesLeftText: {instanceID: 0}
+  - poisonCountText: {instanceID: 0}
+  - roundText: {instanceID: 0}
+  - gray_heart: {fileID: 2086377203379646751, guid: 4f493bbaf09500a48b19be77b66ca831, type: 3}
+  - red_heart: {fileID: 21300000, guid: 840439c1e84bd264fa7a9ad82c9fac0d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

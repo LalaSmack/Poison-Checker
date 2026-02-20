@@ -42,10 +42,17 @@ public class RoundSpawner : MonoBehaviour
     private DishUI selectedDish;
     private List<DishUI> spawnedDishes = new List<DishUI>();
     private HashSet<DishUI> poisonedDishes = new HashSet<DishUI>();
+
+    private int totalHealth = 5; //how much health player has the entire game
+    public int playerHealth; // current health player has
+    public Sprite gray_heart;
+    public Sprite red_heart;
+    public Image[] hearts;
     
     public void StartGame()
     {
         round = 0;
+        playerHealth = totalHealth;
         NextRound();
     }
 
@@ -169,6 +176,7 @@ public class RoundSpawner : MonoBehaviour
             }
         }
         Debug.Log("WIN: correct poisons! Next round.");
+        
         NextRound();
     }
     private void UpdateButtons()
@@ -218,6 +226,21 @@ public class RoundSpawner : MonoBehaviour
         {
             int r = UnityEngine.Random.Range(i, list.Count);
             (list[i], list[r]) = (list[r], list[i]);
+        }
+    }
+    //update player health when 'serve' button is pressed
+    public void updateHealth(int lose){
+        playerHealth-=lose;
+        if (playerHealth<=0){
+            //code for game over
+        }
+        for (int i=0; i<hearts.Length; i++){
+            if (i<playerHealth){
+                hearts[i].sprite = red_heart;
+            }
+            else{
+                hearts[i].sprite = gray_heart;
+            }
         }
     }
 }

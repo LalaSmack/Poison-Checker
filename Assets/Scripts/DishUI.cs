@@ -87,6 +87,7 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
         isRevealed = true;
         if (IsPoisoned)
         {
+            spawner.updateHealth(1);
             StartFlashRed();
         }
         else
@@ -153,4 +154,6 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
         // Example: change label text (optional)
         // label.text = IsPoisoned ? $"{Data.foodName} ☠" : $"{Data.foodName} ✓";
     }
+
+    
 }
