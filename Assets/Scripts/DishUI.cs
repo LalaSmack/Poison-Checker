@@ -60,6 +60,7 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
     {
         // Select this dish
         spawner.SelectDish(this);
+        GameAudio.Instance.PlayClick();
 
     }
 

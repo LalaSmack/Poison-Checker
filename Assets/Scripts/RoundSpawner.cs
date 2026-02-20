@@ -151,6 +151,7 @@ public class RoundSpawner : MonoBehaviour
     if (selectedDish.IsMarked) return; // Already marked, do nothing. Unmarking is not allowed in current design.
 
     selectedDish.SetMarked(true);
+    GameAudio.Instance.PlayClick();
     Debug.Log($"Dish {selectedDish.data.foodName} marked: {selectedDish.IsMarked}");
     // Update markedCount
     markedCount++;
@@ -180,16 +181,17 @@ public class RoundSpawner : MonoBehaviour
         if (tastesLeft <= 0) return;
 
         tastesLeft--;
-
+        GameAudio.Instance.PlayClick();
         // Reveal just shows UI info (you decide what “reveal” looks like)
         selectedDish.RevealPoisonResult();
-
+        
         UpdateTopUI();
         UpdateButtons();
     }
 
     public void OnServePressed()
     {
+        GameAudio.Instance.PlayClick();
         // Only allow serve when you have marked exactly poisonCount dishes
         if (markedCount != poisonCount) return;
 
