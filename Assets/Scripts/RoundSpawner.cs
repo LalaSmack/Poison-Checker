@@ -44,12 +44,19 @@ public class RoundSpawner : MonoBehaviour
     // Tracking Days
     [Header("Day Settings")]
     public int totalDays = 5;
-    public int minRoundsPerDay = 4;
+    public int minRoundsPerDay = 3;
     public int maxRoundsPerDay = 6;
     private int day = 1;
     private int roundInDay = 0;
     private int roundsThisDay = 0;
 
+    [Header("Health")]
+    [SerializeField] private Slider healthBar;
+    [SerializeField] private int maxHealth = 150;
+    [SerializeField] private int poisonTasteDamage = 8;
+    [SerializeField] private int healPerNewDay = 20;
+
+private int currentHealth;
     private int poisonCount = 1;
     private int tastesLeft = 0;
     private int carriedOverTastes = 0;
@@ -63,6 +70,8 @@ public class RoundSpawner : MonoBehaviour
     {
         round = 0;
         day = 1;
+        currentHealth = maxHealth;
+        UpdateHealthUI();
         StartNewDay();
         //NextRound();
     }
@@ -74,7 +83,7 @@ public class RoundSpawner : MonoBehaviour
         round = 0;
         //no carried over tastes between days 
         carriedOverTastes = 0; // Reset carried over tastes at the start of a new day
-
+        Heal(healPerNewDay);
         ShowDayStartPopup();
 
         NextRound();
@@ -182,8 +191,11 @@ public class RoundSpawner : MonoBehaviour
 
         tastesLeft--;
         GameAudio.Instance.PlayClick();
-        // Reveal just shows UI info (you decide what “reveal” looks like)
-        selectedDish.RevealPoisonResult();
+        bool wasPoisoned = selectedDish.RevealPoisonResult(); // make this return bool
+        if (wasPoisoned)
+        {
+            TakeDamage(poisonTasteDamage);
+        }
         
         UpdateTopUI();
         UpdateButtons();
@@ -293,6 +305,41 @@ public class RoundSpawner : MonoBehaviour
     StartCoroutine(DayPopupRoutine());
 }
 
+    private void TakeDamage(int amount)
+    {
+        float multiplier = 1f;
+
+        if (day == 1) multiplier = 0.35f;
+        else if (day == 2) multiplier = 0.60f;
+
+        int finalDamage = Mathf.Max(1, Mathf.RoundToInt(amount * multiplier));
+
+        currentHealth -= finalDamage;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            UpdateHealthUI();
+            gameOverManager.TriggerGameOver("You tasted too much poison!");
+            return;
+        }
+
+        UpdateHealthUI();
+
+    }
+
+    private void Heal(int amount)
+    {
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        UpdateHealthUI();
+    }
+    private void UpdateHealthUI()
+    {
+        if (healthBar == null) return;
+
+        healthBar.maxValue = maxHealth;
+        healthBar.value = currentHealth;
+    }
 private System.Collections.IEnumerator DayPopupRoutine()
 {
     dayStartText.gameObject.SetActive(true);

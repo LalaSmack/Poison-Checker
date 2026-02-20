@@ -138,13 +138,9 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
 
         backgroundImage.color = defaultTint;
     }
-    public void RevealPoisonResult()
+    public bool RevealPoisonResult()
     {
-        // You can decide how you want to visually reveal:
-        // show revealedIcon always, or only show if poisoned, etc.
         Reveal();
-        Debug.Log($"Revealed {data.foodName}: IsPoisoned={IsPoisoned}");
-        // Example: change label text (optional)
-        // label.text = IsPoisoned ? $"{Data.foodName} ☠" : $"{Data.foodName} ✓";
+        return IsPoisoned;
     }
 }
