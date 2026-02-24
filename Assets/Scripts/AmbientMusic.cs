@@ -14,10 +14,16 @@ public class AmbientMusic : MonoBehaviour
     [SerializeField] private float targetVolume = 0.8f;
 
     private Coroutine fadeRoutine;
+    private static AmbientMusic instance;
 
     private void Awake()
     {
-        // Optional: keep music when loading new scenes
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;    
         DontDestroyOnLoad(gameObject);
 
         if (source == null) source = GetComponent<AudioSource>();
@@ -30,7 +36,7 @@ public class AmbientMusic : MonoBehaviour
 
     private void Start()
     {
-        if (ambientClip != null)
+        if (ambientClip != null && !source.isPlaying)
             Play(ambientClip, fadeInSeconds);
     }
 
