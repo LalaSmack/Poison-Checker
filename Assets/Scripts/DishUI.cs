@@ -7,10 +7,7 @@ public class DishUI : MonoBehaviour
     [Header("UI References")]
     public Image foodImage;
     public TMPro.TextMeshProUGUI label;
-
-    [Header("Optional visuals")]
-    //public GameObject markedIcon;  
-    //public GameObject revealedIcon;  // indicator for revealed state (to show result of tasting) 
+    public Image Cross;
 
 
     public FoodData data { get; private set; }
@@ -28,7 +25,7 @@ private Coroutine flashRoutine;
 [Header("Tint Colors")]
 public Color defaultTint = Color.white;
 public Color safeTint = new Color(0.6f, 1f, 0.6f);   // green
-public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
+public Color poisonTint = new Color(1f, 0.3f, 0.3f); // red for flash
 
     private void Awake()
     {
@@ -60,12 +57,13 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
     {
         // Select this dish
         spawner.SelectDish(this);
+        GameAudio.Instance.PlayClick();
 
     }
 
     public void SetSelected(bool selected)
     {
-        Debug.Log($"Setting selected: {selected} for dish {data.foodName}");
+        //Debug.Log($"Setting selected: {selected} for dish {data.foodName}");
         if (outline != null)
             outline.enabled = selected;
     }
@@ -75,8 +73,8 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
         IsMarked = marked;
         if (IsMarked)
         {
-            Debug.Log($"Applying poison tint to marked dish {data.foodName}");
-            ApplyTint();
+            //Debug.Log($"Applying poison tint to marked dish {data.foodName}");
+            Cross.gameObject.SetActive(true);
             }
         
     }
@@ -115,35 +113,23 @@ public Color poisonTint = new Color(1f, 0.3f, 0.3f); // brighter red for flash
     {
         backgroundImage.color = flashColor;
         yield return new WaitForSeconds(flashInterval);
-        ApplyTint(); // return to appropriate tint (marked/safe/default)
+        RemoveTint(); 
         yield return new WaitForSeconds(flashInterval);
     }
     
-    ApplyTint();
+    RemoveTint();
 
     flashRoutine = null;
 }
-    private void ApplyTint()
+    private void RemoveTint()
     {
         if (backgroundImage == null) return;
 
-            // Marked overrides everything
-        if (IsMarked)
-        {
-            Debug.Log($"Applying poison tint to marked dish {data.foodName}");
-            backgroundImage.color = poisonTint;
-            return;
-        }
-
         backgroundImage.color = defaultTint;
     }
-    public void RevealPoisonResult()
+    public bool RevealPoisonResult()
     {
-        // You can decide how you want to visually reveal:
-        // show revealedIcon always, or only show if poisoned, etc.
         Reveal();
-        Debug.Log($"Revealed {data.foodName}: IsPoisoned={IsPoisoned}");
-        // Example: change label text (optional)
-        // label.text = IsPoisoned ? $"{Data.foodName} ☠" : $"{Data.foodName} ✓";
+        return IsPoisoned;
     }
 }

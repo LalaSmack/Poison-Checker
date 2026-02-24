@@ -39,17 +39,28 @@ public class RoundSpawner : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dayStartText;
     [SerializeField] private float popupDuration = 0.3f;
 
+    [Header("Score")]
+    [SerializeField] private TextMeshProUGUI scoreText;
+    private int score = 0;
+
     private int round = 0;
     
     // Tracking Days
     [Header("Day Settings")]
     public int totalDays = 5;
-    public int minRoundsPerDay = 4;
-    public int maxRoundsPerDay = 6;
+    public int minRoundsPerDay = 3;
+    public int maxRoundsPerDay = 5;
     private int day = 1;
     private int roundInDay = 0;
     private int roundsThisDay = 0;
 
+    [Header("Health")]
+    [SerializeField] private Slider healthBar;
+    [SerializeField] private int maxHealth = 220;
+    [SerializeField] private int poisonTasteDamage = 8;
+    [SerializeField] private int healPerNewDay = 30;
+
+private int currentHealth;
     private int poisonCount = 1;
     private int tastesLeft = 0;
     private int carriedOverTastes = 0;
@@ -63,6 +74,11 @@ public class RoundSpawner : MonoBehaviour
     {
         round = 0;
         day = 1;
+        currentHealth = maxHealth;
+        UpdateHealthUI();
+
+        score = 0;
+        UpdateScoreUI();
         StartNewDay();
         //NextRound();
     }
@@ -74,7 +90,7 @@ public class RoundSpawner : MonoBehaviour
         round = 0;
         //no carried over tastes between days 
         carriedOverTastes = 0; // Reset carried over tastes at the start of a new day
-
+        Heal(healPerNewDay);
         ShowDayStartPopup();
 
         NextRound();
@@ -95,13 +111,14 @@ public class RoundSpawner : MonoBehaviour
         if (dishCount > 10) 
         {
             dishCount = 10; // Cap at 10 dishes for performance and playability
-            Debug.Log("Max dish count reached!");
+            //Debug.Log("Max dish count reached!");
         }
 
         poisonCount = CalculatePoisonCount(dishCount);
         tastesLeft = CalculateTastesLeft(round) + carriedOverTastes + (day - 1); // Add carried over tastes and bonus taste per day
         carriedOverTastes = 0; // Reset carried over tastes, will be updated if player doesn't use all tastes this round
 
+        AddRoundScore();
         // Decide which indices are poisoned (unique)
         List<int> indices = new List<int>();
         for (int i = 0; i < dishCount; i++) indices.Add(i);
@@ -151,7 +168,8 @@ public class RoundSpawner : MonoBehaviour
     if (selectedDish.IsMarked) return; // Already marked, do nothing. Unmarking is not allowed in current design.
 
     selectedDish.SetMarked(true);
-    Debug.Log($"Dish {selectedDish.data.foodName} marked: {selectedDish.IsMarked}");
+    GameAudio.Instance.PlayClick();
+    //Debug.Log($"Dish {selectedDish.data.foodName} marked: {selectedDish.IsMarked}");
     // Update markedCount
     markedCount++;
 
@@ -163,7 +181,7 @@ public class RoundSpawner : MonoBehaviour
 
         selectedDish = dish;
         selectedDish.SetSelected(true);
-        Debug.Log($"Selected dish: {selectedDish.data.foodName}");
+        //Debug.Log($"Selected dish: {selectedDish.data.foodName}");
         UpdateButtons();
     }
 
@@ -180,16 +198,20 @@ public class RoundSpawner : MonoBehaviour
         if (tastesLeft <= 0) return;
 
         tastesLeft--;
-
-        // Reveal just shows UI info (you decide what “reveal” looks like)
-        selectedDish.RevealPoisonResult();
-
+        GameAudio.Instance.PlayClick();
+        bool wasPoisoned = selectedDish.RevealPoisonResult(); // make this return bool
+        if (wasPoisoned)
+        {
+            TakeDamage(poisonTasteDamage);
+        }
+        
         UpdateTopUI();
         UpdateButtons();
     }
 
     public void OnServePressed()
     {
+        GameAudio.Instance.PlayClick();
         // Only allow serve when you have marked exactly poisonCount dishes
         if (markedCount != poisonCount) return;
 
@@ -201,12 +223,12 @@ public class RoundSpawner : MonoBehaviour
 
             if (playerMarked != shouldBePoisoned)
             {
-                Debug.Log("LOSE: incorrect poison selection");
-                gameOverManager.TriggerGameOver("You served the wrong dishes!");
+                //Debug.Log("LOSE: incorrect poison selection");
+                gameOverManager.TriggerGameOver($"You served the wrong dishes!\n\nFinal Score: {score}");
                 return;
             }
         }
-        Debug.Log("WIN: correct poisons! Next round.");
+        //Debug.Log("WIN: correct poisons! Next round.");
         carriedOverTastes = tastesLeft; // Save unused tastes for next round
         
     // If finished today's rounds, advance day or win
@@ -278,19 +300,74 @@ public class RoundSpawner : MonoBehaviour
 
     private void TriggerWin()
     {
-        Debug.Log("YOU WIN: Completed all rounds on Day 5!");
-        gameOverManager.TriggerGameOver("You survived all 5 days!\n Your King is safe!", "You Win!");
+        //Debug.Log("YOU WIN: Completed all rounds on Day 5!");
+        ApplyWinBonus();
+        gameOverManager.TriggerGameOver($"You survived all 5 days!\n Your King is safe!\n\nFinal Score: {score}", "You Win!");
 
         if (serveButton != null) serveButton.interactable = false;
         if (tasteButton != null) tasteButton.interactable = false;
         if (markButton != null) markButton.interactable = false;
     }
 
+    private void AddRoundScore()
+    {
+        score += 10 * round;
+        score += 50 * day;
+        score += 15 * tastesLeft;
+        UpdateScoreUI();
+    }
+
+    private void ApplyWinBonus()
+    {
+        score = Mathf.RoundToInt(score * 2.5f) + 1000;
+        UpdateScoreUI();
+    }
+
+    private void UpdateScoreUI()
+    {
+        if (scoreText != null)
+            scoreText.text = $"Score: {score}";
+    }
     private void ShowDayStartPopup()
 {
     StartCoroutine(DayPopupRoutine());
 }
 
+    private void TakeDamage(int amount)
+    {
+        float multiplier = 1f;
+
+        if (day == 1) multiplier = 0.35f;
+        else if (day == 2) multiplier = 0.60f;
+
+        int finalDamage = Mathf.Max(1, Mathf.RoundToInt(amount * multiplier));
+
+        currentHealth -= finalDamage;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            UpdateHealthUI();
+            gameOverManager.TriggerGameOver($"You tasted too much poison!\n\nFinal Score: {score}");
+            return;
+        }
+
+        UpdateHealthUI();
+
+    }
+
+    private void Heal(int amount)
+    {
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        UpdateHealthUI();
+    }
+    private void UpdateHealthUI()
+    {
+        if (healthBar == null) return;
+
+        healthBar.maxValue = maxHealth;
+        healthBar.value = currentHealth;
+    }
 private System.Collections.IEnumerator DayPopupRoutine()
 {
     dayStartText.gameObject.SetActive(true);
